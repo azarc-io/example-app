@@ -4,34 +4,7 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="180e859c-204c-4728-b169-1b52e6564e95" name="Changes" comment="Testing">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/pr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pr.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/actions/buildx/action.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/actions/configuration/action.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/actions/lint/action.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/actions/slack/action.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/app/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/app/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/domain.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/domain.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/event/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/event/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/gqlgen_private.yml" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/gqlgen_private.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/gqlgen_public.yml" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/gqlgen_public.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/common/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/common/generated.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/private/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/private/generated.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.mutation.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.mutation.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.query.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.query.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.subscription.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/app.subscription.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/resolver.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/private/resolvers/resolver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/public/generated.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/public/generated.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.mutation.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.mutation.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.query.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.query.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.subscription.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/app.subscription.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/resolver.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/gql/graph/public/resolvers/resolver.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/service/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/service/app.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/types/interface.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/types/interface.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/taskfile.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/taskfile.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="180e859c-204c-4728-b169-1b52e6564e95" name="Changes" comment="Testing" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,7 +36,7 @@
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feat/VTHP-123__testing",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
     "last_opened_file_path": "/Users/waeljammal/Development/golang/example-app",
