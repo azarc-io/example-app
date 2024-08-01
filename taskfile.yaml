@@ -1,0 +1,342 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+##############################################################################
+# DOT ENV SUPPORT
+##############################################################################
+
+dotenv:
+  - .env
+
+env:
+  BINARY_NAME: {{% .PROJECT_NAME %}}
+  GIT_REPO: https://github.com/azarc-io/{{% .PROJECT_NAME %}}
+  CORE_COMPOSE_URL: https://raw.githubusercontent.com/azarc-io/verathread-dev-toolkit/feature/VTHP-2077_add-gateway-chart/docker-compose.yml?token=GHSAT0AAAAAAB2BDHFGGUGRIQOOPHM356XSZVLURAQ
+
+tasks:
+  ##############################################################################
+  # DEV - NATIVE
+  ##############################################################################
+
+  dev:
+    desc: "runs both the backend and frontend in local dev mode"
+    deps:
+      - dev:be
+      - dev:fe
+    cmds:
+      - echo "finished"
+
+  dev:be:
+    desc: "builds the backend with hot reloading"
+    prefix: gateway
+    method: none
+    cmds:
+      - fswatch -config .fsw.task.yml
+    env:
+      CONFIG_DIR: cmd/app/config
+      BASE_CONTEXT: base
+      MONGO_HOST: localhost
+
+  dev:fe:
+    desc: "starts the front end in dev mode with hmr support"
+    dir: cmd/web
+    cmds:
+      - yarn dev
+    env:
+      NODE_ENV: development
+
+  ##############################################################################
+  # DEV - DOCKER COMPOSE
+  ##############################################################################
+
+  compose:
+    desc: "Starts up dependant services such as redis, nats and mongo"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml up -d
+
+  compose:down:
+    desc: "Stops previously started containers using <compose>"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml down
+
+  compose:dev:
+    desc: "Starts up dependant services such as redis, nats and mongo and runs all apps in development mode with hot reloading"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml -f docker-compose-dev.yml up -d
+
+  compose:dev:down:
+    desc: "Stops previously started containers using <compose:dev>"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml -f docker-compose-dev.yml down
+
+  compose:rebuild:
+    desc: "Rebuilds all docker containers in compose"
+    deps:
+      - compose:deps
+    cmds:
+      - task: compose:rebuild:be
+      - task: compose:rebuild:fe
+      - echo "rebuild completed"
+
+  compose:rebuild:be:
+    desc: "Rebuilds the gateway be docker image in compose"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml -f docker-compose-dev.yml build backend
+
+  compose:rebuild:fe:
+    desc: "Rebuilds the gateway fe docker image in compose"
+    deps:
+      - compose:deps
+    cmds:
+      - docker compose --project-directory {{.ROOT_DIR}} -f bin/docker-compose-core.yml -f docker-compose-dev.yml build frontend
+
+  compose:deps:
+    internal: true
+    cmds:
+      - curl -o bin/docker-compose-core.yml $CORE_COMPOSE_URL
+      - echo $CORE_COMPOSE_URL >> bin/compose_url
+    sources:
+      - bin/docker-compose-core.yml
+      - bin/compose_url
+
+  ##############################################################################
+  # BUILD
+  ##############################################################################
+
+  build:be:multi:
+    desc: "builds the backend for all platforms concurrently"
+    deps:
+      - task: build:be:amd
+      - task: build:be:arm
+    cmd: echo "finished building"
+
+  build:be:amd:
+    desc: "builds the backend"
+    cmds:
+      - CGO_ENABLED=1 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -tags wg_composition_v8 -ldflags='-linkmode external -extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/{{% .PROJECT_NAME %}} cmd/app/main.go
+    vars:
+      GOOS: '{{default "linux" .GOOS}}'
+      GOARCH: '{{default "amd64" .GOARCH}}'
+
+  build:be:arm:
+    desc: "builds the backend"
+    cmds:
+      - CGO_ENABLED=0 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -ldflags='-extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/{{% .PROJECT_NAME %}} cmd/app/main.go
+    vars:
+      GOOS: '{{default "linux" .GOOS}}'
+      GOARCH: '{{default "arm64" .GOARCH}}'
+
+  build:fe:
+    desc: "builds the frontend for production"
+    dir: cmd/web
+    cmds:
+      - echo "building for environment ${ENV_MODE}"
+      - yarn build --env-mode ${ENV_MODE}
+    env:
+      ENV_MODE: production
+
+  ##############################################################################
+  # DOCKER
+  ##############################################################################
+
+  docker:build:multi:
+    desc: "builds a docker image"
+    cmds:
+      - |
+        docker buildx build . -t $DOCKER_REGISTRY/$DOCKER_IMAGE:$DOCKER_VERSION \
+          --platform $PLATFORM \
+          --build-arg BINARY=bin/$PLATFORM_OS-$PLATFORM_ARCH/$BINARY_NAME \
+          --label="org.opencontainers.image.description={{% .PROJECT_DESCRIPTION %}}" \
+          --label="org.opencontainers.image.created={{now}}" \
+          --label="org.opencontainers.image.name=$DOCKER_IMAGE" \
+          --label="org.opencontainers.image.revision={{.GIT_COMMIT}}" \
+          --label="org.opencontainers.image.version=$DOCKER_VERSION" \
+          --label="org.opencontainers.image.source=$GIT_REPO" \
+          --annotation="index:org.opencontainers.image.description={{% .PROJECT_DESCRIPTION %}}" \
+          --cache-from type=gha \
+          --cache-to type=gha,mode=max \
+          --push \
+          -f $DOCKERFILE
+    env:
+      DOCKER_REGISTRY: "k3d-local-registry:5000"
+      DOCKER_IMAGE: "{{% .PROJECT_NAME %}}-be"
+      DOCKER_VERSION: "dev"
+      PLATFORM: "linux/amd64,linux/arm64"
+      DOCKERFILE: "deployment/docker/app/Dockerfile.multi"
+      BUILDX_NO_DEFAULT_ATTESTATIONS: 1
+    vars:
+      GIT_COMMIT:
+        sh: git log -n 1 --format=%h
+
+  docker:re-tag:
+    desc: "re-tags a docker image"
+    cmds:
+      - docker buildx imagetools create -t $DOCKER_REGISTRY/$DOCKER_IMAGE:$TARGET_VERSION $DOCKER_REGISTRY/$DOCKER_IMAGE:$SOURCE_VERSION
+    env:
+      DOCKER_REGISTRY: "localhost:5000"
+      DOCKER_IMAGE: "{{% .PROJECT_NAME %}}-be"
+      TARGET_VERSION: "dev"
+      SOURCE_VERSION: "dev"
+
+  ##############################################################################
+  # LINT
+  ##############################################################################
+
+  lint:be:
+    desc: "runs lint checks for the backend using golangci"
+    cmds:
+      - golangci-lint run
+
+  lint:be:fix:
+    desc: "lints go code using golangci and attempts to apply fixes"
+    cmds:
+      - golangci-lint run --fix
+
+  lint:fe:
+    desc: "runs lint checks for the frontend"
+    dir: cmd/web
+    cmds:
+      - yarn lint
+
+  ##############################################################################
+  # TEST
+  ##############################################################################
+
+  test:fe:
+    desc: "runs tests for the frontend"
+    dir: cmd/web
+    cmds:
+      - echo "not implemented yet"
+
+  ##############################################################################
+  # CI
+  ##############################################################################
+
+  ci:fe:install:
+    desc: "installs dependencies for ci"
+    dir: cmd/web
+    cmds:
+      - yarn install --prefer-offline --frozen-lockfile --non-interactive
+
+  ##############################################################################
+  # GENERATE
+  ##############################################################################
+
+  gen:gql:
+    desc: "generate gql types and schema"
+    dir: internal/gql
+    cmds:
+      - yarn generate
+
+  ##############################################################################
+  # SETUP
+  ##############################################################################
+
+  setup:
+    desc: "run this if you are starting with a fresh checkout, see documentation for configuration instructions"
+    cmds:
+      - curl -fsSL https://raw.githubusercontent.com/tilt-dev/tilt/master/scripts/install.sh | bash
+      - task: setup:tilt:template
+      - task: setup:env:template
+      - task: setup:fe
+      - task: setup:gql
+      - go install github.com/codeskyblue/fswatch@latest
+
+  setup:fe:
+    desc: "installs front end dependencies"
+    dir: cmd/web
+    cmds:
+      - yarn install
+
+  setup:gql:
+    desc: "installs gql dependencies for code & schema generation"
+    dir: internal/gql
+    cmds:
+      - yarn install
+
+  setup:container:
+    desc: "run this if you are starting with a fresh checkout, see documentation for configuration instructions"
+    cmds:
+      - go install github.com/codeskyblue/fswatch@latest
+
+  setup:tilt:template:
+    desc: "copies the tilt config template to the root of the project, will not overwrite if existing"
+    internal: true
+    cmds:
+      - cp deployment/template/_tilt_config.json tilt_config.json
+    status:
+      - test -f ./tilt_config.json
+
+  setup:env:template:
+    desc: "copies the .env template to the root of the project, will not overwrite if existing"
+    internal: true
+    cmds:
+      - cp deployment/template/env .env
+    status:
+      - test -f ./.env
+
+  ##############################################################################
+  # DOCS
+  ##############################################################################
+
+  docs:install:deps:
+    desc: "installs python dependencies for mkdocs - requires python 3+"
+    dir: docs
+    cmds:
+      - |
+        pip install \
+          mkdocs pymdown-extensions mkdocs-material \
+          mkdocs-extra-sass-plugin mkdocs-minify-plugin mkdocs-redirects livereload mkdocs-glightbox \
+          mkdocs-mermaid2-plugin mkdocs-drawio-file
+
+  docs:serve:
+    desc: "builds and serves documentation"
+    dir: docs
+    cmds:
+      - mkdocs serve
+
+  docs:build:
+    desc: "builds documentation and outputs to docs/site"
+    dir: docs
+    cmds:
+      - mkdocs build
+
+  ##############################################################################
+  # TESTING
+  ##############################################################################
+
+  test:
+    desc: "runs e2e tests using gotestsum"
+    cmds:
+      - gotestsum --junitfile-testcase-classname=short --jsonfile bin/toolkit_e2e.json --junitfile bin/toolkit_e2e.xml --junitfile-testsuite-name=short --format testname -- -timeout 15m -p 2 -count=1 ./internal/...
+
+  test:ci:unit:
+    desc: "runs e2e tests using gotestsum"
+    cmds:
+      - mkdir -p bin
+      - gotestsum -- -coverprofile=bin/unit.cover.out ./internal/...
+
+  ##############################################################################
+  # CI
+  ##############################################################################
+
+  ci:install:charts:
+    desc: "Installs dependency charts"
+    cmds:
+      - helm upgrade --install nats  --create-namespace ./deployment/charts/nats  --namespace $NAMESPACE --wait --set=local=false
+      - helm upgrade --install keydb --create-namespace ./deployment/charts/keydb --namespace $NAMESPACE --wait --set=local=false
+
+  ci:test:
+    cmds:
+      - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache

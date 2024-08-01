@@ -1,0 +1,57 @@
+name: {{% .PROJECT_NAME %}}
+id: {{% .PROJECT_NAME %}}-1
+title: {{% .PROJECT_TITLE %}}
+description: {{% .PROJECT_DESCRIPTION %}}
+
+logger:
+  level: info
+  mode: dev # or prd
+
+database:
+  dsn: ${MONGO_DSN}
+  name: vth-gateway
+
+redis:
+  address: ${REDIS_ADDRESS}
+
+nats:
+  address: ${NATS_ADDRESS}
+  drain: true
+
+http:
+  public:
+    address: ${BIND_ADDRESS}
+    port: {{% .PUBLIC_PORT %}}
+  private:
+    address: ${BIND_ADDRESS}
+    port: {{% .PRIVATE_PORT %}}
+  cors:
+    allow_credentials: true
+    allow_origins:
+      - '*'
+    allow_headers:
+      - '*'
+    allow_methods:
+      - POST
+      - GET
+      - PUT
+      - DELETE
+      - PATCH
+      - HEAD
+
+cluster:
+  enabled: true
+  # manual service routes
+#  services:
+#    - name: user
+#      addresses:
+#        public: http://localhost:6040/graphql
+#        private: http://localhost:6041/graphql
+
+app:
+  web_dir: /web
+  routing:
+    proxy: false
+    gateway_url: http://localhost:6011/graphql
+    web_url: http://host.docker.internal:{{% .WEB_PORT %}}
+    api_url: http://host.docker.internal:{{% .PUBLIC_PORT %}}

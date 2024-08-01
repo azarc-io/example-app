@@ -1,0 +1,26 @@
+name: 'Lint Backend'
+description: 'Lint Backend'
+inputs: {}
+outputs: {}
+runs:
+  using: "composite"
+  env:
+    GOLANGCILINT_VER: "v1.59.1"
+    GOPRIVATE: "github.com/azarc-io"
+  steps:
+    - name: "Checkout"
+      uses: actions/checkout@v4
+    - name: "Setup Go"
+      uses: actions/setup-go@v5
+      with:
+        cache-dependency-path: go.sum
+        go-version-file: go.mod
+    - name: "Fix git URL"
+      run: git config --global url."https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
+    - name: "Go Mod"
+      run: go mod download
+    - name: "Lint"
+      uses: golangci/golangci-lint-action@v6.0.1
+      with:
+        version: ${{ env.GOLANGCILINT_VER }}
+        skip-cache: true

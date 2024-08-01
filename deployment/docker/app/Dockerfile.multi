@@ -1,0 +1,9 @@
+FROM --platform=$BUILDPLATFORM alpine:3.20
+LABEL authors="waeljammal"
+
+ARG TARGETOS
+ARG TARGETARCH
+
+COPY bin/${TARGETOS}-${TARGETARCH}/{{% .PROJECT_NAME %}} /
+RUN chmod +x /{{% .PROJECT_NAME %}}
+ENTRYPOINT ["/{{% .PROJECT_NAME %}}"]

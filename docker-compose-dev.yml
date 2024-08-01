@@ -1,0 +1,40 @@
+﻿name: gw-dev
+
+services:
+  ##################################################################################
+  # GLOBAL COMMON SERVICES
+  ##################################################################################
+
+  frontend:
+    build:
+      context: .
+      dockerfile: "deployment/docker/web/Dockerfile.dev"
+    ports:
+      - "{{% .WEB_PORT %}}:{{% .WEB_PORT %}}"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./cmd/web:/src
+
+  backend:
+    build:
+      context: .
+      dockerfile: "deployment/docker/app/Dockerfile.dev"
+      args:
+        GITHUB_PAT_TOKEN: ${GITHUB_PAT_TOKEN}
+    environment:
+      CONFIG_DIR: cmd/app/config
+      BASE_CONTEXT: base
+      CONFIG_CONTEXTS: docker
+    ports:
+      - "{{% .PUBLIC_PORT %}}:{{% .PUBLIC_PORT %}}"
+      - "{{% .PRIVATE_PORT %}}:{{% .PRIVATE_PORT %}}"
+    depends_on:
+      - mongodb
+      - keydb
+      - nats
+    volumes:
+      - ./internal:/src/internal
+      - ./cmd/app:/src/cmd/app
+      - ./go.mod:/src/go.mod
+      - ./go.sum:/src/go.sum

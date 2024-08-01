@@ -1,0 +1,119 @@
+replicas: 1
+
+nodeSelector: { }
+
+nameOverride: "{{% .PROJECT_NAME %}}"
+fullnameOverride: "{{% .PROJECT_NAME %}}"
+
+imagePullSecrets:
+  - name: ghcr-login-secret
+
+# if using traefik as your proxy
+traefik: "yes"
+# disables deployment of any proxy middle wares
+middleware_enabled: "no"
+# local dev mode
+dev: false
+# hmr for the front end
+hmr: false
+# if true then web sidecar will be enabled
+web: true
+
+fileStorage:
+  enabled: false
+
+# Custom Service account management
+serviceAccount:
+  # Whether to create service account or not
+  create: true
+  # Name of the service account
+  name: "{{% .PROJECT_NAME %}}-svc-account"
+
+image:
+  # the gateway image
+  repository: "k3d-local-registry:5000/{{% .PROJECT_NAME %}}"
+  tag: latest
+  # the web sidecar, if hmr is true then the sidecar will run node and build the web app
+  # otherwise it will be a lightweight container that hosts the files on behalf of the gateway
+  web_repository: "k3d-local-registry:5000/{{% .PROJECT_NAME %}}"
+  web_tag: latest
+  pullPolicy: Always
+
+# port bindings
+bind:
+  publicHttp: &bindPublicHttpPort 6010
+  privateHttp: &bindPrivateHttpPort 6011
+  hmr: {{% .WEB_PORT %}}
+  debug: 40000
+
+# labels to attach to all resources
+commonLabels:
+  verathread.com/scrape-logs: "true"
+
+# pod annotations
+annotations: { }
+
+# handles routing, is split into two / for web and /graphql and /modules for api and static file proxy
+ingress:
+  # If `true`, an Ingress is created
+  enabled: false
+
+# Service configuration
+configuration:
+  name: "{{% .PROJECT_NAME %}}"
+  title: "{{% .PROJECT_TITLE %}}"
+  description: "{{% .PROJECT_DESCRIPTION %}}"
+  id: ${MICRO_SERVICE_ID}
+  database:
+    dsn: mongodb%3A%2F%2Fmongodb%3A27017%2F%3FreplicaSet%3Drs0%26tls%3Dfalse%26connect%3Ddirect%26retryWrites%3Dtrue%26w%3Dmajority
+    name: vth-gateway
+  redis:
+    address: keydb:6379
+  nats:
+    address: nats://nats:4222
+    drain: true
+  logger:
+    level: info
+    mode: dev # or prd
+  http:
+    public:
+      address: ${BIND_ADDRESS}
+      port: *bindPublicHttpPort
+    private:
+      address: ${BIND_ADDRESS}
+      port: *bindPrivateHttpPort
+    cors:
+      allow_credentials: true
+      allow_origins:
+        - '*'
+      allow_headers:
+        - '*'
+      allow_methods:
+        - POST
+        - GET
+        - PUT
+        - DELETE
+        - PATCH
+        - HEAD
+  app:
+    web_dir: /web
+    web_proxy: ""
+    routing:
+      proxy: false
+      gateway_url: http://gateway:6011/graphql
+      web_url: "http://{{% .PROJECT_NAME %}}:6010"
+      api_url: "http://{{% .PROJECT_NAME %}}:6010"
+  cluster:
+    enabled: true
+    # manual service routes
+#    services:
+#      - name: user
+#        addresses:
+#          public: http://localhost:6040/graphql
+#          private: http://localhost:6041/graphql
+
+# environment variables attached to the pod
+extraEnvVars:
+  BASE_CONTEXT: config
+  CONFIG_DIR: /config
+  BIND_ADDRESS: 0.0.0.0

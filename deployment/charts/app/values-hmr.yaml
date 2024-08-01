@@ -1,0 +1,5 @@
+# Service configuration
+configuration:
+  app:
+    routing:
+      web_url: http://{{% .PROJECT_NAME %}}:{{% .WEB_PORT %}}

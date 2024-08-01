@@ -1,0 +1,143 @@
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+directive @goField(forceResolver: String, name: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @nestedQueries on INPUT_FIELD_DEFINITION
+
+directive @query on INPUT_FIELD_DEFINITION
+
+directive @queryCondition on INPUT_FIELD_DEFINITION
+
+directive @queryField on INPUT_FIELD_DEFINITION
+
+directive @queryFieldExists on INPUT_FIELD_DEFINITION
+
+directive @queryFields on INPUT_FIELD_DEFINITION
+
+directive @queryOp on INPUT_FIELD_DEFINITION
+
+directive @queryRules on INPUT_FIELD_DEFINITION
+
+directive @queryType(type: QueryType!) on INPUT_FIELD_DEFINITION
+
+directive @queryValue on INPUT_FIELD_DEFINITION
+
+directive @ref(dependencies: [String], field: String) on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @refRoot(id: RefRoot!) on FIELD_DEFINITION
+
+directive @validation(constraint: String!) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @warden(action: String!, filterField: String, resource: String!, resourceKey: String) on FIELD_DEFINITION
+
+scalar Any
+
+scalar Duration
+
+type Mutation {
+  setValue(input: ValueInput!): ValueOutput!
+  setValueInternal(input: ValueInput!): ValueOutput!
+}
+
+input Page {
+  limit: Int @ref(field: "limit")
+  page: Int @ref(field: "page")
+}
+
+type PageInfo {
+  next: Int!
+  page: Int!
+  perPage: Int!
+  prev: Int!
+  total: Int!
+  totalPage: Int!
+}
+
+type Query {
+  getValue: ValueOutput!
+}
+
+enum QueryCondition {
+  And
+  Or
+}
+
+input QueryOperatorAndDate {
+  op: QueryOperators! @queryOp
+  value: Time @queryValue
+}
+
+input QueryOperatorAndValue {
+  op: QueryOperators! @queryOp
+  value: Any @queryValue
+}
+
+input QueryOperatorFieldAndValue {
+  exists: Boolean @queryFieldExists
+  field: String! @queryField
+  op: QueryOperators! @queryOp
+  value: Any @queryValue
+}
+
+enum QueryOperators {
+  Contains
+  Equal
+  GreaterThan
+  GreaterThanOrEqual
+  In
+  LessThan
+  LessThanOrEqual
+  NotEqual
+  NotIn
+  Regex
+}
+
+enum QueryType {
+  Date
+  Deleted
+}
+
+input QueryValue {
+  value: Any @queryValue
+}
+
+enum RefRoot {
+  AppRef
+}
+
+input Sort {
+  key: String!
+  type: SortType!
+}
+
+enum SortType {
+  ASC
+  DES
+}
+
+type Subscription {
+  subscribeToValueChanges: ValueOutput!
+}
+
+type TagValue {
+  Value: Any! @ref(field: "value")
+}
+
+type TagValues {
+  Key: String! @ref(field: "key")
+  Values: [TagValue] @ref(field: "values")
+}
+
+scalar Time
+
+input ValueInput {
+  value: String!
+}
+
+type ValueOutput {
+  value: String!
+}

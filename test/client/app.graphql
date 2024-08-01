@@ -1,0 +1,11 @@
+mutation SetValue($value: ValueInput!) {
+     setValue(input: $value) {
+         value
+     }
+}
+
+query GetValue {
+    getValue {
+        value
+    }
+}

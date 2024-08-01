@@ -1,0 +1,24 @@
+database:
+  dsn: mongodb%3A%2F%2Fmongodb%3A27017%2F%3FreplicaSet%3Drs0%26tls%3Dfalse%26connect%3Ddirect%26retryWrites%3Dtrue%26w%3Dmajority
+  name: vth-gateway
+
+redis:
+  address: keydb:6379
+
+nats:
+  address: nats://nats:4222
+  drain: true
+
+http:
+  public:
+    address: 0.0.0.0
+  private:
+    address: 0.0.0.0
+
+app:
+  web_dir: /web
+  routing:
+    proxy: false
+    gateway_url: http://gateway:6011/graphql
+    web_url: http://frontend:{{% .WEB_PORT %}}
+    api_url: http://backend:{{% .PUBLIC_PORT %}}
