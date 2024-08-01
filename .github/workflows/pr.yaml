@@ -29,7 +29,9 @@ jobs:
       GOPRIVATE: "github.com/azarc-io"
     steps:
       - name: "Lint"
-        uses: "github.com/azarc-io/example-app/.github/actions/lint"
+        uses: "./.github/actions/lint"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 #  unit-tests-be:
 #    name: "Unit BE - ${{ matrix.label }}"

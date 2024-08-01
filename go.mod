@@ -1,4 +1,4 @@
-module github.com/azarc-io/verathread-app-template
+module github.com/azarc-io/example-app
 
 go 1.22.5
 

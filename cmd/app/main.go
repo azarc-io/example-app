@@ -1,8 +1,8 @@
 package main
 
 import (
-	app "github.com/azarc-io/verathread-app-template/internal"
-	"github.com/azarc-io/verathread-app-template/internal/types"
+	app "github.com/azarc-io/example-app/internal"
+	"github.com/azarc-io/example-app/internal/types"
 	"github.com/azarc-io/verathread-next-common/service"
 	"github.com/azarc-io/verathread-next-common/util"
 	"github.com/rs/zerolog/log"

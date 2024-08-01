@@ -41,7 +41,7 @@ resolver:
 # if they match it will use them, otherwise it will generate them.
 autobind:
   - "github.com/azarc-io/verathread-next-common/common/genericdb"
-  - "github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
+  - "github.com/azarc-io/example-app/internal/gql/graph/common/model"
 
 # This section declares type mapping between the GraphQL and go type systems
 #

@@ -1,13 +1,13 @@
 package app
 
 import (
-	"github.com/azarc-io/verathread-app-template/internal/event"
-	pvtgraph "github.com/azarc-io/verathread-app-template/internal/gql/graph/private"
-	pvtresolvers "github.com/azarc-io/verathread-app-template/internal/gql/graph/private/resolvers"
-	pubgraph "github.com/azarc-io/verathread-app-template/internal/gql/graph/public"
-	pubresolvers "github.com/azarc-io/verathread-app-template/internal/gql/graph/public/resolvers"
-	"github.com/azarc-io/verathread-app-template/internal/service"
-	"github.com/azarc-io/verathread-app-template/internal/types"
+	"github.com/azarc-io/example-app/internal/event"
+	pvtgraph "github.com/azarc-io/example-app/internal/gql/graph/private"
+	pvtresolvers "github.com/azarc-io/example-app/internal/gql/graph/private/resolvers"
+	pubgraph "github.com/azarc-io/example-app/internal/gql/graph/public"
+	pubresolvers "github.com/azarc-io/example-app/internal/gql/graph/public/resolvers"
+	"github.com/azarc-io/example-app/internal/service"
+	"github.com/azarc-io/example-app/internal/types"
 	app2 "github.com/azarc-io/verathread-next-common/common/app"
 	appuc "github.com/azarc-io/verathread-next-common/usecase/app"
 	graphqluc "github.com/azarc-io/verathread-next-common/usecase/graphql"

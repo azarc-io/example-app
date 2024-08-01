@@ -6,8 +6,8 @@ package pubresolvers
 
 import (
 	"context"
-	"github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
-	pubgraph "github.com/azarc-io/verathread-app-template/internal/gql/graph/public"
+	"github.com/azarc-io/example-app/internal/gql/graph/common/model"
+	pubgraph "github.com/azarc-io/example-app/internal/gql/graph/public"
 )
 
 // SubscribeToValueChanges is the resolver for the subscribeToValueChanges field.

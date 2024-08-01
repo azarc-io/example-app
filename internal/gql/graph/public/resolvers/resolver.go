@@ -1,6 +1,6 @@
 package pubresolvers
 
-import "github.com/azarc-io/verathread-app-template/internal/types"
+import "github.com/azarc-io/example-app/internal/types"
 
 // This file will not be regenerated automatically.
 //

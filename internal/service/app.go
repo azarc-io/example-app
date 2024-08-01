@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
-	"github.com/azarc-io/verathread-app-template/internal/types"
+	"github.com/azarc-io/example-app/internal/gql/graph/common/model"
+	"github.com/azarc-io/example-app/internal/types"
 	"github.com/rs/zerolog"
 )
 

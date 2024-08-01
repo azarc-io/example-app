@@ -2,7 +2,7 @@ package event
 
 import (
 	"context"
-	"github.com/azarc-io/verathread-app-template/internal/types"
+	"github.com/azarc-io/example-app/internal/types"
 	"github.com/nats-io/nats.go"
 	"github.com/rs/zerolog"
 )

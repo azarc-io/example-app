@@ -6,8 +6,8 @@ package pvtresolvers
 
 import (
 	"context"
-	"github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
-	pvtgraph "github.com/azarc-io/verathread-app-template/internal/gql/graph/private"
+	"github.com/azarc-io/example-app/internal/gql/graph/common/model"
+	pvtgraph "github.com/azarc-io/example-app/internal/gql/graph/private"
 )
 
 // GetValue is the resolver for the getValue field.

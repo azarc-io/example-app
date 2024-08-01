@@ -339,4 +339,4 @@ tasks:
 
   ci:test:
     cmds:
-      - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache
+      - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache --env GITHUB_TOKEN=$GITHUB_PAT_TOKEN -access

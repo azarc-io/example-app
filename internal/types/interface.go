@@ -2,7 +2,7 @@ package types
 
 import (
 	"context"
-	"github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
+	"github.com/azarc-io/example-app/internal/gql/graph/common/model"
 )
 
 type (

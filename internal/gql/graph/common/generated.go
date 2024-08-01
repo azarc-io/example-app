@@ -14,7 +14,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/azarc-io/verathread-app-template/internal/gql/graph/common/model"
+	"github.com/azarc-io/example-app/internal/gql/graph/common/model"
 	"github.com/azarc-io/verathread-next-common/common/genericdb"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
