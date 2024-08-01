@@ -1,6 +1,12 @@
 name: 'Lint Backend'
 description: 'Lint Backend'
-inputs: {}
+inputs:
+  token:
+    description: "Github Token"
+    required: true
+  lint-version:
+    description: "Golangci Lint Version"
+    default: "v1.59.1"
 outputs: {}
 runs:
   using: "composite"
@@ -12,12 +18,12 @@ runs:
         go-version-file: go.mod
     - name: "Fix git URL"
       shell: bash
-      run: git config --global url."https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/".insteadOf "https://github.com/"
+      run: git config --global url."https://x-access-token:${{ inputs.token }}@github.com/".insteadOf "https://github.com/"
     - name: "Go Mod"
       shell: bash
       run: go mod download
     - name: "Lint"
       uses: golangci/golangci-lint-action@v6.0.1
       with:
-        version: ${{ env.GOLANGCILINT_VER }}
+        version: ${{ inputs.lint-version }}
         skip-cache: true

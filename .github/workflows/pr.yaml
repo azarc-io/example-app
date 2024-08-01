@@ -28,12 +28,10 @@ jobs:
       GOLANGCILINT_VER: "v1.59.1"
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
       - name: "Lint"
-        uses: "./.github/actions/lint"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: "azarc-io/verathread-actions/lint@initial"
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
 
 #  unit-tests-be:
 #    name: "Unit BE - ${{ matrix.label }}"
