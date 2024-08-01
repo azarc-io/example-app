@@ -29,36 +29,25 @@ jobs:
       GOLANGCILINT_VER: "v1.59.1"
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Go Mod"
-        shell: bash
-        run: ls -la
       - name: "Lint"
-        uses: "azarc-io/verathread-actions/lint@initial"
+        uses: "azarc-io/verathread-actions/lint-be@initial"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
-#  unit-tests-be:
-#    name: "Unit BE - ${{ matrix.label }}"
-#    runs-on: "${{ matrix.os }}"
-#    env:
-#      GOLANGCILINT_VER: "v1.59.1"
-#      GOPRIVATE: "github.com/azarc-io"
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        include:
-#          - os: ubuntu-latest
-#            target_os: linux
-#            target_arch: amd64
-#            label: Linux (AMD64)
-#          - os: ubuntu-latest
-#            target_os: linux
-#            target_arch: arm64
-#            label: Linux (ARM64)
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#
+  unit-tests-be:
+    name: "Unit Test BE"
+    runs-on: "${{ matrix.os }}"
+    env:
+      GOPRIVATE: "github.com/azarc-io"
+    steps:
+      - name: "Lint"
+        uses: "azarc-io/verathread-actions/unit-test-be@initial"
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+
 #  integration-tests-be:
 #    name: "Integration BE - ${{ matrix.label }}"
 #    runs-on: "${{ matrix.os }}"
