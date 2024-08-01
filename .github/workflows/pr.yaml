@@ -35,12 +35,8 @@ jobs:
           repository: azarc-io/verathread-actions
           path: .github/actions
           ref: initial
-      - name: "Debug"
-        run: |
-          ls -la .github/actions
-          ls -la .github/actions/lint-be
       - name: "Lint"
-        uses: "./github/actions/lint-be"
+        uses: "./.github/actions/lint-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
@@ -57,7 +53,7 @@ jobs:
           path: .github/actions
           ref: initial
       - name: "Unit Test"
-        uses: "./github/actions/unit-test-be"
+        uses: "./.github/actions/unit-test-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
