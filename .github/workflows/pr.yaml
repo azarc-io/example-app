@@ -36,7 +36,9 @@ jobs:
           path: .github/actions
           ref: initial
       - name: "Debug"
-        run: ls -la .github/actions
+        run: |
+          ls -la .github/actions
+          ls -la .github/actions/lint-be
       - name: "Lint"
         uses: "./github/actions/lint-be"
         with:
