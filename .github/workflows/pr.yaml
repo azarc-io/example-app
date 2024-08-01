@@ -29,14 +29,8 @@ jobs:
       GOLANGCILINT_VER: "v1.59.1"
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Checkout Latest Actions"
-        uses: actions/checkout@v4
-        with:
-          repository: azarc-io/verathread-actions
-          path: /tmp/actions
-          ref: initial
       - name: "Lint"
-        uses: "/tmp/actions/lint-be"
+        uses: "./.github/actions/lint-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
@@ -46,14 +40,8 @@ jobs:
     env:
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Checkout Latest Actions"
-        uses: actions/checkout@v4
-        with:
-          repository: azarc-io/verathread-actions
-          path: /tmp/actions
-          ref: initial
       - name: "Unit Test"
-        uses: "/tmp/actions/unit-test-be"
+        uses: "./.github/actions/unit-test-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
