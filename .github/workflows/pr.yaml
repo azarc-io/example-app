@@ -33,10 +33,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: azarc-io/verathread-actions
-          path: .github/actions
+          path: /tmp/actions
           ref: initial
       - name: "Lint"
-        uses: "./.github/actions/lint-be"
+        uses: "/tmp/actions/lint-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
@@ -50,10 +50,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: azarc-io/verathread-actions
-          path: .github/actions
+          path: /tmp/actions
           ref: initial
       - name: "Unit Test"
-        uses: "./.github/actions/unit-test-be"
+        uses: "/tmp/actions/unit-test-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
