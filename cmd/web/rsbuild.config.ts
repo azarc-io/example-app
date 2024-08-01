@@ -7,8 +7,8 @@ import CompressionPlugin from 'compression-webpack-plugin/dist';
 
 // Customize these variables to match your app requirements
 const regex = /-/g;
-const name: string = '{{% .PROJECT_NAME %}}'.replace(regex, '_'); // Should be globally unique
-const serverPort: number = Number('{{% .WEB_PORT %}}'); // Should be globally unique with a group eg. (next, cloud)
+const name: string = 'example-app'.replace(regex, '_'); // Should be globally unique
+const serverPort: number = Number('3001'); // Should be globally unique with a group eg. (next, cloud)
 
 export default defineConfig({
     plugins: [pluginReact(), pluginSass()],
@@ -25,7 +25,7 @@ export default defineConfig({
         },
     },
     dev: {
-        assetPrefix: 'http://localhost:{{% .WEB_PORT %}}/',
+        assetPrefix: 'http://localhost:3001/',
     },
     output: {
       minify: true

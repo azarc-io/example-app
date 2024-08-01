@@ -1,7 +1,7 @@
 {
   "gateway": false,
   "debug": false,
-  "debug_port": "{{% .DEBUG_PORT %}}",
+  "debug_port": "40001",
   "kube_context": "k3d-dev-1",
   "arch": "arm64",
   "hmr": true

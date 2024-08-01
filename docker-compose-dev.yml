@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: "deployment/docker/web/Dockerfile.dev"
     ports:
-      - "{{% .WEB_PORT %}}:{{% .WEB_PORT %}}"
+      - "3001:3001"
     environment:
       NODE_ENV: development
     volumes:
@@ -27,8 +27,8 @@ services:
       BASE_CONTEXT: base
       CONFIG_CONTEXTS: docker
     ports:
-      - "{{% .PUBLIC_PORT %}}:{{% .PUBLIC_PORT %}}"
-      - "{{% .PRIVATE_PORT %}}:{{% .PRIVATE_PORT %}}"
+      - "6020:6020"
+      - "6021:6021"
     depends_on:
       - mongodb
       - keydb

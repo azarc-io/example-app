@@ -1,7 +1,7 @@
-name: {{% .PROJECT_NAME %}}
-id: {{% .PROJECT_NAME %}}-1
-title: {{% .PROJECT_TITLE %}}
-description: {{% .PROJECT_DESCRIPTION %}}
+name: example-app
+id: example-app-1
+title: example
+description: example
 
 logger:
   level: info
@@ -21,10 +21,10 @@ nats:
 http:
   public:
     address: ${BIND_ADDRESS}
-    port: {{% .PUBLIC_PORT %}}
+    port: 6020
   private:
     address: ${BIND_ADDRESS}
-    port: {{% .PRIVATE_PORT %}}
+    port: 6021
   cors:
     allow_credentials: true
     allow_origins:
@@ -53,5 +53,5 @@ app:
   routing:
     proxy: false
     gateway_url: http://localhost:6011/graphql
-    web_url: http://host.docker.internal:{{% .WEB_PORT %}}
-    api_url: http://host.docker.internal:{{% .PUBLIC_PORT %}}
+    web_url: http://host.docker.internal:3001
+    api_url: http://host.docker.internal:6020

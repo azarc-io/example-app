@@ -2,4 +2,4 @@
 configuration:
   app:
     routing:
-      web_url: http://{{% .PROJECT_NAME %}}:{{% .WEB_PORT %}}
+      web_url: http://example-app:3001

@@ -2,8 +2,8 @@ replicas: 1
 
 nodeSelector: { }
 
-nameOverride: "{{% .PROJECT_NAME %}}"
-fullnameOverride: "{{% .PROJECT_NAME %}}"
+nameOverride: "example-app"
+fullnameOverride: "example-app"
 
 imagePullSecrets:
   - name: ghcr-login-secret
@@ -27,15 +27,15 @@ serviceAccount:
   # Whether to create service account or not
   create: true
   # Name of the service account
-  name: "{{% .PROJECT_NAME %}}-svc-account"
+  name: "example-app-svc-account"
 
 image:
   # the gateway image
-  repository: "k3d-local-registry:5000/{{% .PROJECT_NAME %}}"
+  repository: "k3d-local-registry:5000/example-app"
   tag: latest
   # the web sidecar, if hmr is true then the sidecar will run node and build the web app
   # otherwise it will be a lightweight container that hosts the files on behalf of the gateway
-  web_repository: "k3d-local-registry:5000/{{% .PROJECT_NAME %}}"
+  web_repository: "k3d-local-registry:5000/example-app"
   web_tag: latest
   pullPolicy: Always
 
@@ -43,7 +43,7 @@ image:
 bind:
   publicHttp: &bindPublicHttpPort 6010
   privateHttp: &bindPrivateHttpPort 6011
-  hmr: {{% .WEB_PORT %}}
+  hmr: 3001
   debug: 40000
 
 # labels to attach to all resources
@@ -60,9 +60,9 @@ ingress:
 
 # Service configuration
 configuration:
-  name: "{{% .PROJECT_NAME %}}"
-  title: "{{% .PROJECT_TITLE %}}"
-  description: "{{% .PROJECT_DESCRIPTION %}}"
+  name: "example-app"
+  title: "example"
+  description: "example"
   id: ${MICRO_SERVICE_ID}
   database:
     dsn: mongodb%3A%2F%2Fmongodb%3A27017%2F%3FreplicaSet%3Drs0%26tls%3Dfalse%26connect%3Ddirect%26retryWrites%3Dtrue%26w%3Dmajority
@@ -101,8 +101,8 @@ configuration:
     routing:
       proxy: false
       gateway_url: http://gateway:6011/graphql
-      web_url: "http://{{% .PROJECT_NAME %}}:6010"
-      api_url: "http://{{% .PROJECT_NAME %}}:6010"
+      web_url: "http://example-app:6010"
+      api_url: "http://example-app:6010"
   cluster:
     enabled: true
     # manual service routes

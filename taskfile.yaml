@@ -10,8 +10,8 @@ dotenv:
   - .env
 
 env:
-  BINARY_NAME: {{% .PROJECT_NAME %}}
-  GIT_REPO: https://github.com/azarc-io/{{% .PROJECT_NAME %}}
+  BINARY_NAME: example-app
+  GIT_REPO: https://github.com/azarc-io/example-app
   CORE_COMPOSE_URL: https://raw.githubusercontent.com/azarc-io/verathread-dev-toolkit/feature/VTHP-2077_add-gateway-chart/docker-compose.yml?token=GHSAT0AAAAAAB2BDHFGGUGRIQOOPHM356XSZVLURAQ
 
 tasks:
@@ -124,7 +124,7 @@ tasks:
   build:be:amd:
     desc: "builds the backend"
     cmds:
-      - CGO_ENABLED=1 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -tags wg_composition_v8 -ldflags='-linkmode external -extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/{{% .PROJECT_NAME %}} cmd/app/main.go
+      - CGO_ENABLED=1 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -tags wg_composition_v8 -ldflags='-linkmode external -extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/example-app cmd/app/main.go
     vars:
       GOOS: '{{default "linux" .GOOS}}'
       GOARCH: '{{default "amd64" .GOARCH}}'
@@ -132,7 +132,7 @@ tasks:
   build:be:arm:
     desc: "builds the backend"
     cmds:
-      - CGO_ENABLED=0 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -ldflags='-extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/{{% .PROJECT_NAME %}} cmd/app/main.go
+      - CGO_ENABLED=0 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -ldflags='-extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/example-app cmd/app/main.go
     vars:
       GOOS: '{{default "linux" .GOOS}}'
       GOARCH: '{{default "arm64" .GOARCH}}'
@@ -157,20 +157,20 @@ tasks:
         docker buildx build . -t $DOCKER_REGISTRY/$DOCKER_IMAGE:$DOCKER_VERSION \
           --platform $PLATFORM \
           --build-arg BINARY=bin/$PLATFORM_OS-$PLATFORM_ARCH/$BINARY_NAME \
-          --label="org.opencontainers.image.description={{% .PROJECT_DESCRIPTION %}}" \
+          --label="org.opencontainers.image.description=example" \
           --label="org.opencontainers.image.created={{now}}" \
           --label="org.opencontainers.image.name=$DOCKER_IMAGE" \
           --label="org.opencontainers.image.revision={{.GIT_COMMIT}}" \
           --label="org.opencontainers.image.version=$DOCKER_VERSION" \
           --label="org.opencontainers.image.source=$GIT_REPO" \
-          --annotation="index:org.opencontainers.image.description={{% .PROJECT_DESCRIPTION %}}" \
+          --annotation="index:org.opencontainers.image.description=example" \
           --cache-from type=gha \
           --cache-to type=gha,mode=max \
           --push \
           -f $DOCKERFILE
     env:
       DOCKER_REGISTRY: "k3d-local-registry:5000"
-      DOCKER_IMAGE: "{{% .PROJECT_NAME %}}-be"
+      DOCKER_IMAGE: "example-app-be"
       DOCKER_VERSION: "dev"
       PLATFORM: "linux/amd64,linux/arm64"
       DOCKERFILE: "deployment/docker/app/Dockerfile.multi"
@@ -185,7 +185,7 @@ tasks:
       - docker buildx imagetools create -t $DOCKER_REGISTRY/$DOCKER_IMAGE:$TARGET_VERSION $DOCKER_REGISTRY/$DOCKER_IMAGE:$SOURCE_VERSION
     env:
       DOCKER_REGISTRY: "localhost:5000"
-      DOCKER_IMAGE: "{{% .PROJECT_NAME %}}-be"
+      DOCKER_IMAGE: "example-app-be"
       TARGET_VERSION: "dev"
       SOURCE_VERSION: "dev"
 

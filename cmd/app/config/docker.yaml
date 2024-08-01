@@ -20,5 +20,5 @@ app:
   routing:
     proxy: false
     gateway_url: http://gateway:6011/graphql
-    web_url: http://frontend:{{% .WEB_PORT %}}
-    api_url: http://backend:{{% .PUBLIC_PORT %}}
+    web_url: http://frontend:3001
+    api_url: http://backend:6020

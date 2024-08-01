@@ -7,4 +7,4 @@ ENV BINARY=${BINARY}
 
 COPY $BINARY /
 
-ENTRYPOINT ["/{{% .PROJECT_NAME %}}"]
+ENTRYPOINT ["/example-app"]

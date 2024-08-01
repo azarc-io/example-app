@@ -4,6 +4,6 @@ LABEL authors="waeljammal"
 ARG TARGETOS
 ARG TARGETARCH
 
-COPY bin/${TARGETOS}-${TARGETARCH}/{{% .PROJECT_NAME %}} /
-RUN chmod +x /{{% .PROJECT_NAME %}}
-ENTRYPOINT ["/{{% .PROJECT_NAME %}}"]
+COPY bin/${TARGETOS}-${TARGETARCH}/example-app /
+RUN chmod +x /example-app
+ENTRYPOINT ["/example-app"]

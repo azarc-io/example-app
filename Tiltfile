@@ -43,7 +43,7 @@ default_registry(
 
 local_resource(
   'backend-compile',
-  'CGO_ENABLED=0 GOOS=linux GOARCH=%s go build -gcflags "all=-N -l" -o ./bin/{{% .PROJECT_NAME %}} ./cmd/app/main.go' % arch,
+  'CGO_ENABLED=0 GOOS=linux GOARCH=%s go build -gcflags "all=-N -l" -o ./bin/example-app ./cmd/app/main.go' % arch,
   deps=['./cmd/app/main.go', './cmd/app', './internal/', './pkg/'],
   ignore=['./internal/gql/node_modules'],
   labels=["compile"],
@@ -51,13 +51,13 @@ local_resource(
 )
 
 # the default entry path
-entrypoint = '/{{% .PROJECT_NAME %}}'
+entrypoint = '/example-app'
 appDockerFile = './deployment/docker/app/Dockerfile.tilt'
 webDockerFile = './deployment/docker/web/Dockerfile.tilt'
 
 # entry path to use if debug is enabled
 if debug:
-    entrypoint = '/dlv --listen=:%s --api-version=2 --headless=true --only-same-user=false --accept-multiclient exec --continue /{{% .PROJECT_NAME %}}' % debugPort
+    entrypoint = '/dlv --listen=:%s --api-version=2 --headless=true --only-same-user=false --accept-multiclient exec --continue /example-app' % debugPort
 
 # dockerfile to use if hmr is enabled
 if hmr:
@@ -65,7 +65,7 @@ if hmr:
 
 # watches directories for changes and triggers an update of the docker image
 docker_build_with_restart(
-  '{{% .PROJECT_NAME %}}-be',
+  'example-app-be',
   context='.',
   entrypoint=entrypoint,
   dockerfile=appDockerFile,
@@ -83,7 +83,7 @@ docker_build_with_restart(
 # else such as /graphql or /api would point at the gateway
 if hmr:
     docker_build(
-      '{{% .PROJECT_NAME %}}-fe',
+      'example-app-fe',
       context='.',
       entrypoint='yarn dev:tilt',
       dockerfile=webDockerFile,
@@ -113,7 +113,7 @@ else:
       resource_deps=[]
     )
     docker_build_with_restart(
-      '{{% .PROJECT_NAME %}}-fe',
+      'example-app-fe',
       context='.',
       entrypoint='echo "reloading" && cp -R /static/. /web/ && sleep 9999999999d',
       dockerfile=webDockerFile,
@@ -138,17 +138,17 @@ if hmr:
     flags.append("--values=./deployment/charts/app/values-hmr.yaml")
 
 helm_resource(
-  '{{% .PROJECT_NAME %}}-chart',
+  'example-app-chart',
   './deployment/charts/app',
   namespace=os.getenv('NAMESPACE'),
   deps=["./deployment/charts/app"],
   flags=flags,
-  image_deps=['{{% .PROJECT_NAME %}}-be', '{{% .PROJECT_NAME %}}-fe'],
+  image_deps=['example-app-be', 'example-app-fe'],
   image_keys=[('image.repository', 'image.tag'), ('image.web_repository', 'image.web_tag')],
 )
 
 if debug:
-    k8s_resource('{{% .PROJECT_NAME %}}-chart',
+    k8s_resource('example-app-chart',
         port_forwards=[
             debugPort,  # debugger
         ],

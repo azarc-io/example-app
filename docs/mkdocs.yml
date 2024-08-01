@@ -1,9 +1,9 @@
-site_name: "{{% .PROJECT_TITLE %}}"
+site_name: "example"
 site_url: https://azarc.io
-site_description: "{{% .PROJECT_DESCRIPTION %}}"
+site_description: "example"
 copyright: Made by the Azarc.io team
-repo_name: "azarc-io/{{% .PROJECT_NAME %}}"
-repo_url: "https://github.com/azarc-io/{{% .PROJECT_NAME %}}"
+repo_name: "azarc-io/example-app"
+repo_url: "https://github.com/azarc-io/example-app"
 edit_uri: edit/main/www/docs/
 
 theme:

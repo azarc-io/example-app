@@ -5,4 +5,4 @@ RUN CGO_ENABLED=0 go install github.com/go-delve/delve/cmd/dlv@latest
 FROM gcr.io/distroless/static:debug
 WORKDIR /
 COPY --from=helper /go/bin/dlv /
-COPY bin/{{% .PROJECT_NAME %}} /
+COPY bin/example-app /
