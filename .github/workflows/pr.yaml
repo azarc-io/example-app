@@ -29,118 +29,118 @@ jobs:
       GOPRIVATE: "github.com/azarc-io"
     steps:
       - name: "Lint"
-        uses: ./.github/actions/lint
+        uses: "./.github/actions/lint"
 
-  unit-tests-be:
-    name: "Unit BE - ${{ matrix.label }}"
-    runs-on: "${{ matrix.os }}"
-    env:
-      GOLANGCILINT_VER: "v1.59.1"
-      GOPRIVATE: "github.com/azarc-io"
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target_os: linux
-            target_arch: amd64
-            label: Linux (AMD64)
-          - os: ubuntu-latest
-            target_os: linux
-            target_arch: arm64
-            label: Linux (ARM64)
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-  integration-tests-be:
-    name: "Integration BE - ${{ matrix.label }}"
-    runs-on: "${{ matrix.os }}"
-    env:
-      GOLANGCILINT_VER: "v1.59.1"
-      GOPRIVATE: "github.com/azarc-io"
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target_os: linux
-            target_arch: amd64
-            label: Linux (AMD64)
-          - os: ubuntu-latest
-            target_os: linux
-            target_arch: arm64
-            label: Linux (ARM64)
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-  build-be:
-    name: "Build BE"
-    runs-on: ubuntu-latest
-    env:
-      GOLANGCILINT_VER: "v1.59.1"
-      GOPRIVATE: "github.com/azarc-io"
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-  build-fe:
-    name: "Build FE"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-
-  e2e:
-    name: "E2E - K8S ${{ matrix.k8s-version }}"
-    runs-on: ubuntu-latest
-    needs:
-      - unit-tests-be
-      - integration-tests-be
-      - lint-be
-      - build-fe
-      - build-be
-    env:
-      REGISTRY_PORT: 5000
-      REGISTRY_NAME: kind-registry
-      GATEWAY_REGISTRY: localhost:5000/gateway
-      GATEWAY_WEB_REGISTRY: localhost:5000/gateway-web
-      GATEWAY_TAG: dev
-      NAMESPACE: gateway-tests
-    # if: github.event_name != 'pull_request'
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-  qa:
-    name: "Promote To QA"
-    runs-on: ubuntu-latest
-    environment: qa
-    env:
-      NAMESPACE: "qa-gateway-1"
-    needs:
-      - e2e
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-  release:
-    name: "Release"
-    runs-on: ubuntu-latest
-    environment: production
-    outputs:
-      version: ${{ steps.tag.outputs.tag }}
-    needs:
-      - qa
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
-          #ref: ${{ github.event.pull_request.head.sha }}
+#  unit-tests-be:
+#    name: "Unit BE - ${{ matrix.label }}"
+#    runs-on: "${{ matrix.os }}"
+#    env:
+#      GOLANGCILINT_VER: "v1.59.1"
+#      GOPRIVATE: "github.com/azarc-io"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - os: ubuntu-latest
+#            target_os: linux
+#            target_arch: amd64
+#            label: Linux (AMD64)
+#          - os: ubuntu-latest
+#            target_os: linux
+#            target_arch: arm64
+#            label: Linux (ARM64)
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#
+#  integration-tests-be:
+#    name: "Integration BE - ${{ matrix.label }}"
+#    runs-on: "${{ matrix.os }}"
+#    env:
+#      GOLANGCILINT_VER: "v1.59.1"
+#      GOPRIVATE: "github.com/azarc-io"
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - os: ubuntu-latest
+#            target_os: linux
+#            target_arch: amd64
+#            label: Linux (AMD64)
+#          - os: ubuntu-latest
+#            target_os: linux
+#            target_arch: arm64
+#            label: Linux (ARM64)
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#
+#  build-be:
+#    name: "Build BE"
+#    runs-on: ubuntu-latest
+#    env:
+#      GOLANGCILINT_VER: "v1.59.1"
+#      GOPRIVATE: "github.com/azarc-io"
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#
+#  build-fe:
+#    name: "Build FE"
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#
+#  e2e:
+#    name: "E2E - K8S ${{ matrix.k8s-version }}"
+#    runs-on: ubuntu-latest
+#    needs:
+#      - unit-tests-be
+#      - integration-tests-be
+#      - lint-be
+#      - build-fe
+#      - build-be
+#    env:
+#      REGISTRY_PORT: 5000
+#      REGISTRY_NAME: kind-registry
+#      GATEWAY_REGISTRY: localhost:5000/gateway
+#      GATEWAY_WEB_REGISTRY: localhost:5000/gateway-web
+#      GATEWAY_TAG: dev
+#      NAMESPACE: gateway-tests
+#    # if: github.event_name != 'pull_request'
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#  qa:
+#    name: "Promote To QA"
+#    runs-on: ubuntu-latest
+#    environment: qa
+#    env:
+#      NAMESPACE: "qa-gateway-1"
+#    needs:
+#      - e2e
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#  release:
+#    name: "Release"
+#    runs-on: ubuntu-latest
+#    environment: production
+#    outputs:
+#      version: ${{ steps.tag.outputs.tag }}
+#    needs:
+#      - qa
+#    steps:
+#      - name: "Checkout"
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#          token: ${{ secrets.PAT_TOKEN }}
+#          #ref: ${{ github.event.pull_request.head.sha }}
