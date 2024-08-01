@@ -30,7 +30,7 @@ jobs:
       GOPRIVATE: "github.com/azarc-io"
     steps:
       - name: "Lint"
-        uses: "./.github/actions/lint-be"
+        uses: "azarc-io/verathread-actions/lint-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
@@ -41,7 +41,7 @@ jobs:
       GOPRIVATE: "github.com/azarc-io"
     steps:
       - name: "Unit Test"
-        uses: "./.github/actions/unit-test-be"
+        uses: "azarc-io/verathread-actions/unit-test-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
