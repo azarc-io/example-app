@@ -28,6 +28,9 @@ jobs:
       GOLANGCILINT_VER: "v1.59.1"
       GOPRIVATE: "github.com/azarc-io"
     steps:
+      - name: "Go Mod"
+        shell: bash
+        run: ls -la
       - name: "Lint"
         uses: "azarc-io/verathread-actions/lint@initial"
         with:
