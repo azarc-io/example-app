@@ -35,8 +35,10 @@ jobs:
           repository: azarc-io/verathread-actions
           path: .github/actions
           ref: initial
+      - name: "Debug"
+        run: ls -la .github/actions
       - name: "Lint"
-        uses: "./github/actions/lint-be@initial"
+        uses: "./github/actions/lint-be"
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
