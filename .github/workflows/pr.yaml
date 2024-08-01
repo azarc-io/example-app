@@ -36,17 +36,19 @@ jobs:
 
   unit-tests-be:
     name: "Unit Test BE"
-    runs-on: "${{ matrix.os }}"
+    runs-on: ubuntu-latest
     env:
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Lint"
+      - name: "Unit Test"
         uses: "azarc-io/verathread-actions/unit-test-be@initial"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+        env:
+          GOPRIVATE: "github.com/azarc-io"
 
 #  integration-tests-be:
 #    name: "Integration BE - ${{ matrix.label }}"
