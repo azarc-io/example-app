@@ -71,6 +71,11 @@ jobs:
           buildx: true
           ghcr: true
           go: true
+      - name: "debug"
+        run: |
+          echo "Debug Issue: ${{ steps.setup.issue }}" >> $GITHUB_STEP_SUMMARY
+          echo "Debug Repo Name: ${{ steps.setup.repo-name }}" >> $GITHUB_STEP_SUMMARY
+          echo "Debug Short SHA: ${{ steps.setup.short-sha }}" >> $GITHUB_STEP_SUMMARY
       - name: "Build"
         uses: "azarc-io/verathread-actions/build-go@initial"
         with:
