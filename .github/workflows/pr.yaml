@@ -76,6 +76,7 @@ jobs:
         with:
           artifact-name: ${{ steps.setup.repo-name }}
           short-sha: ${{ steps.setup.short-sha }}
+          issue: ${{ steps.setup.issue }}
 
 #  build-fe:
 #    name: "Build FE"
