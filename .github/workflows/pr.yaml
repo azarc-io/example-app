@@ -22,17 +22,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint-be:
-    name: "Lint BE"
-    runs-on: ubuntu-latest
-    env:
-      GOLANGCILINT_VER: "v1.59.1"
-      GOPRIVATE: "github.com/azarc-io"
-    steps:
-      - name: "Lint"
-        uses: "azarc-io/verathread-actions/lint-be@initial"
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
+#  lint-be:
+#    name: "Lint BE"
+#    runs-on: ubuntu-latest
+#    env:
+#      GOLANGCILINT_VER: "v1.59.1"
+#      GOPRIVATE: "github.com/azarc-io"
+#    steps:
+#      - name: "Lint"
+#        uses: "azarc-io/verathread-actions/lint-be@initial"
+#        with:
+#          token: ${{ secrets.PAT_TOKEN }}
 
   unit-tests-be:
     name: "Unit Test BE"
@@ -40,13 +40,17 @@ jobs:
     env:
       GOPRIVATE: "github.com/azarc-io"
     steps:
-      - name: "Unit Test"
-        uses: "azarc-io/verathread-actions/unit-test-be@initial"
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+        env:
+          GOPRIVATE: "github.com/azarc-io"
+      - name: "Unit Test"
+        uses: "azarc-io/verathread-actions/unit-test-be@initial"
         env:
           GOPRIVATE: "github.com/azarc-io"
 

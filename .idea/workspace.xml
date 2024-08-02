@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="180e859c-204c-4728-b169-1b52e6564e95" name="Changes" comment="Testing">
       <change beforePath="$PROJECT_DIR$/.github/workflows/pr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pr.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,6 +15,13 @@
   </component>
   <component name="CodyActiveAccount">
     <option name="activeAccountId" value="d8fb3a18-dc53-488d-af8b-19a64484f89a" />
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="mySelectedFileTypes">
+      <set>
+        <option value="Go" />
+      </set>
+    </option>
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.22.5.darwin-arm64" />
   <component name="Git.Settings">
