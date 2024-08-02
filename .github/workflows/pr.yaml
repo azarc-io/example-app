@@ -42,6 +42,7 @@ jobs:
     steps:
       - name: "Setup"
         uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
         with:
           token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
@@ -54,6 +55,8 @@ jobs:
         uses: "azarc-io/verathread-actions/unit-test-be@initial"
         env:
           GOPRIVATE: "github.com/azarc-io"
+        with:
+          repo-name: ${{ steps.setup.repo-name }}
 
 #  integration-tests-be:
 #    name: "Integration BE - ${{ matrix.label }}"
