@@ -1,38 +1,41 @@
 name: Pull Request
 
-on: push
-#on:
-#  pull_request:
-#    branches: [ 'main' ]
-#    types:
-#      - opened
-#      - synchronize
+on:
+  pull_request:
+    branches: [ 'main' ]
+    types:
+      - opened
+      - synchronize
 
 env:
-  AWS_REGION: eu-west-2
   FORCE_COLOR: 1
-  DRY_RUN: false
-  DEPLOY: true
   RUNNER_ALLOW_RUNASROOT: "1"
   DOCKER_REGISTRY: ghcr.io/azarc-io/verathread-gateway
-  GOLANGCILINT_VER: "v1.59.1"
 
 concurrency:
   group: pr-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-#  lint-be:
-#    name: "Lint BE"
-#    runs-on: ubuntu-latest
-#    env:
-#      GOLANGCILINT_VER: "v1.59.1"
-#      GOPRIVATE: "github.com/azarc-io"
-#    steps:
-#      - name: "Lint"
-#        uses: "azarc-io/verathread-actions/lint-be@initial"
-#        with:
-#          token: ${{ secrets.PAT_TOKEN }}
+  lint-be:
+    name: "Lint BE"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          go: true
+        env:
+          GOPRIVATE: "github.com/azarc-io"
+      - name: "Lint"
+        uses: "azarc-io/verathread-actions/lint-be@initial"
+        with:
+          lint-version: "v1.59.1"
 
   unit-tests-be:
     name: "Unit Test BE"
