@@ -26,9 +26,6 @@ jobs:
         id: setup
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
-          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
-          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
           go: true
         env:
           GOPRIVATE: "github.com/azarc-io"
@@ -48,9 +45,6 @@ jobs:
         id: setup
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
-          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
-          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
           gotestsum: true
           go: true
         env:
@@ -62,38 +56,27 @@ jobs:
         with:
           repo-name: ${{ steps.setup.repo-name }}
 
-#  integration-tests-be:
-#    name: "Integration BE - ${{ matrix.label }}"
-#    runs-on: "${{ matrix.os }}"
-#    env:
-#      GOLANGCILINT_VER: "v1.59.1"
-#      GOPRIVATE: "github.com/azarc-io"
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        include:
-#          - os: ubuntu-latest
-#            target_os: linux
-#            target_arch: amd64
-#            label: Linux (AMD64)
-#          - os: ubuntu-latest
-#            target_os: linux
-#            target_arch: arm64
-#            label: Linux (ARM64)
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#
-#  build-be:
-#    name: "Build BE"
-#    runs-on: ubuntu-latest
-#    env:
-#      GOLANGCILINT_VER: "v1.59.1"
-#      GOPRIVATE: "github.com/azarc-io"
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#
+  build-be:
+    name: "Build BE"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          buildx: true
+          ghcr: true
+          go: true
+      - name: "Build"
+        uses: "azarc-io/verathread-actions/build-go@initial"
+        with:
+          artifact-name: ${{ steps.setup.repo-name }}
+          short-sha: ${{ steps.setup.short-sha }}
+
 #  build-fe:
 #    name: "Build FE"
 #    runs-on: ubuntu-latest
