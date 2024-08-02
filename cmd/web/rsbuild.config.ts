@@ -1,7 +1,7 @@
 import {defineConfig} from '@rsbuild/core';
 import {pluginReact} from '@rsbuild/plugin-react';
 import {pluginSass} from "@rsbuild/plugin-sass";
-// @ts-ignore
+// @ts-expect-error complains that can not load json but loads it fine
 import {dependencies} from './package.json';
 import CompressionPlugin from 'compression-webpack-plugin/dist';
 
