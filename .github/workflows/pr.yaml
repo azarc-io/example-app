@@ -47,6 +47,7 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          go: true
         env:
           GOPRIVATE: "github.com/azarc-io"
       - name: "Unit Test"
