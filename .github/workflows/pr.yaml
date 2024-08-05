@@ -127,8 +127,6 @@ jobs:
     name: "Promote To QA"
     runs-on: ubuntu-latest
     environment: qa
-    env:
-      NAMESPACE: "qa-gateway-1"
     needs:
       - e2e
     steps:
@@ -144,7 +142,7 @@ jobs:
           helm: true
           kubectl: true
       - name: "Deploy"
-        uses: "azarc-io/verathread-actions/build-node@initial"
+        uses: "azarc-io/verathread-actions/deploy@initial"
         with:
           install-task: "ci:install:app:chart:qa"
           namespace: "qa-next-1"
