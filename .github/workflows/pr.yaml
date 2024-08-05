@@ -135,7 +135,6 @@ jobs:
         id: setup
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          ghcr-token: ${{ secrets.GHCR_DOCKER_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -145,6 +144,7 @@ jobs:
       - name: "Deploy"
         uses: "azarc-io/verathread-actions/deploy@initial"
         with:
+          ghcr-token: ${{ secrets.GHCR_DOCKER_TOKEN }}
           install-task: "ci:install:app:chart:qa"
           namespace: "qa-next-1"
           kube-config: ${{ secrets.KUBECONFIG_DEV }}
