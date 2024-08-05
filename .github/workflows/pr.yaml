@@ -138,6 +138,7 @@ jobs:
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          kube-config: ${{ secrets.KUBECONFIG_DEV }}
           ghcr: true
           helm: true
           kubectl: true
@@ -147,8 +148,6 @@ jobs:
           ghcr-token: ${{ secrets.GHCR_DOCKER_TOKEN }}
           install-task: "ci:install:app:chart:qa"
           namespace: "qa-next-1"
-          kube-config: ${{ secrets.KUBECONFIG_DEV }}
-          artifact-name: ${{ steps.setup.outputs.repo-name }}
           short-sha: ${{ steps.setup.outputs.short-sha }}
           issue: ${{ steps.setup.outputs.issue }}
         env:

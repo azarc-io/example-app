@@ -5,29 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="180e859c-204c-4728-b169-1b52e6564e95" name="Changes" comment="Testing">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/pr.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/pr.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/Chart.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/_helpers.tpl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/cm-health.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/pdb.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/sa.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/secret-utils.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/sm.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/sts.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/svc-headless.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/svc-lb.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/svc-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/templates/svc.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/keydb/values.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/Chart.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/Chart.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/charts/nats-0.19.12.tgz" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/requirements.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/templates/jetstream-secret.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/templates/secrets.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/templates/svc-local.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deployment/charts/nats/values.yaml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
