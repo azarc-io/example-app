@@ -100,43 +100,61 @@ jobs:
           short-sha: ${{ steps.setup.outputs.short-sha }}
           issue: ${{ steps.setup.outputs.issue }}
 
-#  e2e:
-#    name: "E2E - K8S ${{ matrix.k8s-version }}"
-#    runs-on: ubuntu-latest
-#    needs:
-#      - unit-tests-be
-#      - integration-tests-be
-#      - lint-be
-#      - build-fe
-#      - build-be
-#    env:
-#      REGISTRY_PORT: 5000
-#      REGISTRY_NAME: kind-registry
-#      GATEWAY_REGISTRY: localhost:5000/gateway
-#      GATEWAY_WEB_REGISTRY: localhost:5000/gateway-web
-#      GATEWAY_TAG: dev
-#      NAMESPACE: gateway-tests
-#    # if: github.event_name != 'pull_request'
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
-#  qa:
-#    name: "Promote To QA"
-#    runs-on: ubuntu-latest
-#    environment: qa
-#    env:
-#      NAMESPACE: "qa-gateway-1"
-#    needs:
-#      - e2e
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#
+  e2e:
+    name: "E2E - K8S ${{ matrix.k8s-version }}"
+    runs-on: ubuntu-latest
+    needs:
+      - unit-tests-be
+      - lint-be
+      - build-fe
+      - build-be
+    env:
+      REGISTRY_PORT: 5000
+      REGISTRY_NAME: kind-registry
+      GATEWAY_REGISTRY: localhost:5000/gateway
+      GATEWAY_WEB_REGISTRY: localhost:5000/gateway-web
+      GATEWAY_TAG: dev
+      NAMESPACE: gateway-tests
+    # if: github.event_name != 'pull_request'
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+  qa:
+    name: "Promote To QA"
+    runs-on: ubuntu-latest
+    environment: qa
+    env:
+      NAMESPACE: "qa-gateway-1"
+    needs:
+      - e2e
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          ghcr: true
+          helm: true
+          kubectl: true
+      - name: "Deploy"
+        uses: "azarc-io/verathread-actions/build-node@initial"
+        with:
+          install-task: "ci:install:app:chart:qa"
+          namespace: "qa-next-1"
+          kube-config: ${{ secrets.KUBECONFIG_DEV }}
+          artifact-name: ${{ steps.setup.outputs.repo-name }}
+          short-sha: ${{ steps.setup.outputs.short-sha }}
+          issue: ${{ steps.setup.outputs.issue }}
+        env:
+          MONGODB_PASSWORD: ${{ secrets.MONGODB_STAGING_PASSWORD }}
+
 #  release:
 #    name: "Release"
 #    runs-on: ubuntu-latest
