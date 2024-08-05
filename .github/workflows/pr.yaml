@@ -152,7 +152,7 @@ jobs:
           short-sha: ${{ steps.setup.outputs.short-sha }}
           issue: ${{ steps.setup.outputs.issue }}
         env:
-          MONGODB_PASSWORD: ${{ secrets.MONGODB_STAGING_PASSWORD }}
+          MONGO_DSN: ${{ secrets.MONGODB_STAGING_DSN }}
 
 #  release:
 #    name: "Release"

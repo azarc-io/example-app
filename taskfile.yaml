@@ -350,14 +350,14 @@ tasks:
           --install --wait --atomic --create-namespace --timeout=2m \
           --namespace=$NAMESPACE \
           --values=deployment/charts/app/values.yaml \
-          --values=deployment/charts/app/values-qa1.yaml \
-          --set configuration.database.pass=$MONGODB_PASSWORD \
+          --set configuration.database.dsn=$MONGO_DSN \
+          --set configuration.database.name=vth-example-app-qa-1 \
           --set image.repository=ghcr.io/azarc-io/example-app/example-app-be \
           --set image.web_repository=ghcr.io/azarc-io/example-app/example-app-fe \
           --set image.tag=$APP_IMAGE_TAG \
           --set image.web_tag=$WEB_IMAGE_TAG
     env:
-      MONGODB_PASSWORD: ""
+      MONGO_DSN: ""
       NAMESPACE: "dev-test"
       APP_IMAGE_TAG: ""
       WEB_IMAGE_TAG: ""
