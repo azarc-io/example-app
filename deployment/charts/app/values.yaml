@@ -1,13 +1,9 @@
 replicas: 1
-
-nodeSelector: { }
-
+nodeSelector: {}
 nameOverride: "example-app"
 fullnameOverride: "example-app"
-
 imagePullSecrets:
   - name: ghcr-login-secret
-
 # if using traefik as your proxy
 traefik: "yes"
 # disables deployment of any proxy middle wares
@@ -18,46 +14,38 @@ dev: false
 hmr: false
 # if true then web sidecar will be enabled
 web: true
-
 fileStorage:
   enabled: false
-
 # Custom Service account management
 serviceAccount:
   # Whether to create service account or not
   create: true
   # Name of the service account
   name: "example-app-svc-account"
-
 image:
   # the gateway image
-  repository: "k3d-local-registry:5000/example-app"
-  tag: latest
+  repository: "ghcr.io/azarc-io/example-app/example-app-be"
+  tag: v1.1.0
   # the web sidecar, if hmr is true then the sidecar will run node and build the web app
   # otherwise it will be a lightweight container that hosts the files on behalf of the gateway
-  web_repository: "k3d-local-registry:5000/example-app"
-  web_tag: latest
+  web_repository: "ghcr.io/azarc-io/example-app/example-app-fe"
+  web_tag: v1.1.0
   pullPolicy: Always
-
 # port bindings
 bind:
   publicHttp: &bindPublicHttpPort 6010
   privateHttp: &bindPrivateHttpPort 6011
   hmr: 3001
   debug: 40000
-
 # labels to attach to all resources
 commonLabels:
   verathread.com/scrape-logs: "true"
-
 # pod annotations
-annotations: { }
-
+annotations: {}
 # handles routing, is split into two / for web and /graphql and /modules for api and static file proxy
 ingress:
   # If `true`, an Ingress is created
   enabled: false
-
 # Service configuration
 configuration:
   name: "example-app"
