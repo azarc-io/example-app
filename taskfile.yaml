@@ -124,7 +124,7 @@ tasks:
   build:be:amd:
     desc: "builds the backend"
     cmds:
-      - CGO_ENABLED=1 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -tags wg_composition_v8 -ldflags='-linkmode external -extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/example-app cmd/app/main.go
+      - CGO_ENABLED=0 GOOS={{.GOOS}} GOARCH={{.GOARCH}} go build -ldflags='-extldflags=-static -s -w' -o bin/{{.GOOS}}-{{.GOARCH}}/example-app cmd/app/main.go
     vars:
       GOOS: '{{default "linux" .GOOS}}'
       GOARCH: '{{default "amd64" .GOARCH}}'
@@ -252,6 +252,12 @@ tasks:
       - task: setup:fe
       - task: setup:gql
       - go install github.com/codeskyblue/fswatch@latest
+      - go install gotest.tools/gotestsum@latest
+
+  setup:ci:
+    desc: "install ci dependencies"
+    cmds:
+      - echo "nothing to setup"
 
   setup:fe:
     desc: "installs front end dependencies"
@@ -316,13 +322,13 @@ tasks:
   # TESTING
   ##############################################################################
 
-  test:
-    desc: "runs e2e tests using gotestsum"
+  test:unit:
+    desc: "runs unit tests using gotestsum"
     cmds:
       - gotestsum --junitfile-testcase-classname=short --jsonfile bin/toolkit_e2e.json --junitfile bin/toolkit_e2e.xml --junitfile-testsuite-name=short --format testname -- -timeout 15m -p 2 -count=1 ./internal/...
 
-  test:ci:unit:
-    desc: "runs e2e tests using gotestsum"
+  test:unit:ci:
+    desc: "runs unit tests using gotestsum for ci"
     cmds:
       - mkdir -p bin
       - gotestsum -- -coverprofile=bin/unit.cover.out ./internal/...
@@ -331,12 +337,61 @@ tasks:
   # CI
   ##############################################################################
 
-  ci:install:charts:
+  ci:install:dependency:charts:
     desc: "Installs dependency charts"
     cmds:
-      - helm upgrade --install nats  --create-namespace ./deployment/charts/nats  --namespace $NAMESPACE --wait --set=local=false
-      - helm upgrade --install keydb --create-namespace ./deployment/charts/keydb --namespace $NAMESPACE --wait --set=local=false
+      - echo "No dependency charts to install"
+
+  ci:install:e2e:dependency:charts:
+    desc: "Installs dependency charts"
+    cmds:
+      - echo "No dependency charts to install"
+
+  ci:install:app:chart:qa:
+    desc: "Installs app chart"
+    cmds:
+      - |
+        helm upgrade example-app deployment/charts/app \
+          --install --wait --atomic --create-namespace --timeout=2m \
+          --namespace=$NAMESPACE \
+          --values=deployment/charts/app/values.yaml \
+          --set configuration.database.dsn=$MONGO_DSN \
+          --set configuration.database.name=vth-example-app-qa-1 \
+          --set image.repository=ghcr.io/azarc-io/example-app/example-app-be \
+          --set image.web_repository=ghcr.io/azarc-io/example-app/example-app-fe \
+          --set image.tag=$APP_IMAGE_TAG \
+          --set image.web_tag=$WEB_IMAGE_TAG
+    env:
+      MONGO_DSN: ""
+      NAMESPACE: "dev-test"
+      APP_IMAGE_TAG: ""
+      WEB_IMAGE_TAG: ""
+
+  ci:install:app:chart:stg:
+    desc: "Installs app chart"
+    cmds:
+      - |
+        helm upgrade example-app deployment/charts/app \
+          --install --wait --atomic --create-namespace --timeout=2m \
+          --namespace=$NAMESPACE \
+          --values=deployment/charts/app/values.yaml \
+          --set configuration.database.dsn=$MONGO_DSN \
+          --set configuration.database.name=vth-example-app-stg1
+    env:
+      MONGO_DSN: ""
+      NAMESPACE: "dev-test"
 
   ci:test:
     cmds:
-      - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache --env GITHUB_TOKEN=$GITHUB_PAT_TOKEN -access
+      - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache --privileged --no-cache-server
+
+  ci:update:version:files:
+    cmds:
+      - yq --version
+      - yq -i '.version = "{{.TAG}}"' 'deployment/charts/app/Chart.yaml'
+      - yq -i '.image.repository = "ghcr.io/azarc-io/example-app/example-app-be"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.web_repository = "ghcr.io/azarc-io/example-app/example-app-fe"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.tag = "{{.TAG}}"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.web_tag = "{{.TAG}}"' 'deployment/charts/app/values.yaml'
+    env:
+      TAG: 'dev'

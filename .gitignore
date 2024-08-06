@@ -24,6 +24,7 @@ go.work.sum
 # Other folders and files
 .data/
 .task/
+.github/actions
 node_modules/
 dist/
 bin/

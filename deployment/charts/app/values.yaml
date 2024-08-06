@@ -66,7 +66,7 @@ configuration:
   id: ${MICRO_SERVICE_ID}
   database:
     dsn: mongodb%3A%2F%2Fmongodb%3A27017%2F%3FreplicaSet%3Drs0%26tls%3Dfalse%26connect%3Ddirect%26retryWrites%3Dtrue%26w%3Dmajority
-    name: vth-gateway
+    name: vth-example-app
   redis:
     address: keydb:6379
   nats:
