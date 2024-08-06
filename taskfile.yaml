@@ -376,7 +376,7 @@ tasks:
           --namespace=$NAMESPACE \
           --values=deployment/charts/app/values.yaml \
           --set configuration.database.dsn=$MONGO_DSN \
-          --set configuration.database.name=vth-example-app-stg-1
+          --set configuration.database.name=vth-example-app-stg1
     env:
       MONGO_DSN: ""
       NAMESPACE: "dev-test"
