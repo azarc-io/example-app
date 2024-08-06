@@ -8,14 +8,15 @@ replace go.opentelemetry.io/otel/trace => go.opentelemetry.io/otel/trace v1.26.0
 
 require (
 	github.com/99designs/gqlgen v0.17.49
+	github.com/Khan/genqlient v0.7.0
 	github.com/azarc-io/verathread-next-common v1.0.1-beta.34
 	github.com/labstack/echo/v4 v4.12.0
+	github.com/nats-io/nats.go v1.36.0
 	github.com/rs/zerolog v1.32.0
 	github.com/vektah/gqlparser/v2 v2.5.16
 )
 
 require (
-	github.com/Khan/genqlient v0.7.0 // indirect
 	github.com/PuerkitoBio/rehttp v1.3.0 // indirect
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/alexflint/go-arg v1.4.2 // indirect
@@ -58,7 +59,6 @@ require (
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.1-0.20220423185008-bf980b35cac4 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
-	github.com/nats-io/nats.go v1.36.0 // indirect
 	github.com/nats-io/nkeys v0.4.7 // indirect
 	github.com/nats-io/nuid v1.0.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.1.0 // indirect
