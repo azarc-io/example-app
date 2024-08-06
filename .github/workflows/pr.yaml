@@ -194,3 +194,4 @@ jobs:
           short-sha: ${{ steps.setup.outputs.short-sha }}
           namespace: "stg-next-1"
           artifact-name: ${{ steps.setup.outputs.repo-name }}
+          install-task: "ci:install:app:chart:stg"
