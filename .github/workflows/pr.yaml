@@ -10,7 +10,6 @@ on:
 env:
   FORCE_COLOR: 1
   RUNNER_ALLOW_RUNASROOT: "1"
-  DOCKER_REGISTRY: ghcr.io/azarc-io/verathread-gateway
 
 concurrency:
   group: pr-${{ github.ref || github.run_id }}
@@ -28,8 +27,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
           go: true
-        env:
-          GOPRIVATE: "github.com/azarc-io"
       - name: "Lint"
         uses: "azarc-io/verathread-actions/lint-be@initial"
         with:
@@ -49,12 +46,8 @@ jobs:
           pat-token: ${{ secrets.PAT_TOKEN }}
           gotestsum: true
           go: true
-        env:
-          GOPRIVATE: "github.com/azarc-io"
       - name: "Unit Test"
         uses: "azarc-io/verathread-actions/unit-test-be@initial"
-        env:
-          GOPRIVATE: "github.com/azarc-io"
         with:
           repo-name: ${{ steps.setup.repo-name }}
 
@@ -174,6 +167,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           checkout-ref: ${{ github.event.pull_request.head.sha }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
