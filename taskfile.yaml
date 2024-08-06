@@ -386,6 +386,7 @@ tasks:
       - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache --privileged --no-cache-server
 
   ci:update:version:files:
+    desc: "Update version numbers in the helm chart"
     cmds:
       - yq --version
       - yq -i '.version = "{{.TAG}}"' 'deployment/charts/app/Chart.yaml'
