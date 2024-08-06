@@ -10,7 +10,6 @@ on:
 env:
   FORCE_COLOR: 1
   RUNNER_ALLOW_RUNASROOT: "1"
-  DOCKER_REGISTRY: ghcr.io/azarc-io/verathread-gateway
 
 concurrency:
   group: pr-${{ github.ref || github.run_id }}
