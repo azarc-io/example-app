@@ -392,6 +392,6 @@ tasks:
       - yq -i '.image.repository = "ghcr.io/azarc-io/example-app/example-app-be"' 'deployment/charts/app/values.yaml'
       - yq -i '.image.web_repository = "ghcr.io/azarc-io/example-app/example-app-fe"' 'deployment/charts/app/values.yaml'
       - yq -i '.image.tag = "{{.TAG}}"' 'deployment/charts/app/values.yaml'
-      - yq -i '.image.web_repository_tag = "{{.TAG}}"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.web_tag = "{{.TAG}}"' 'deployment/charts/app/values.yaml'
     env:
       TAG: 'dev'
