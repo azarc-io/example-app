@@ -342,6 +342,11 @@ tasks:
     cmds:
       - echo "No dependency charts to install"
 
+  ci:install:e2e:dependency:charts:
+    desc: "Installs dependency charts"
+    cmds:
+      - echo "No dependency charts to install"
+
   ci:install:app:chart:qa:
     desc: "Installs dependency charts"
     cmds:
@@ -362,13 +367,17 @@ tasks:
       APP_IMAGE_TAG: ""
       WEB_IMAGE_TAG: ""
 
-
-  ci:install:e2e:dependency:charts:
-    desc: "Installs dependency charts"
-    cmds:
-      - helm upgrade --install nats  --create-namespace ./deployment/charts/nats  --namespace $NAMESPACE --wait --set=local=false
-      - helm upgrade --install keydb --create-namespace ./deployment/charts/keydb --namespace $NAMESPACE --wait --set=local=false
-
   ci:test:
     cmds:
       - act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64 --use-new-action-cache --privileged --no-cache-server
+
+  ci:update:version:files:
+    cmds:
+      - yq --version
+      - yq -i '.version = "$TAG"' 'deployment/charts/app/Chart.yaml'
+      - yq -i '.image.repository = "ghcr.io/azarc-io/example-app/example-app-be"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.web_repository = "ghcr.io/azarc-io/example-app/example-app-fe"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.tag = "$TAG"' 'deployment/charts/app/values.yaml'
+      - yq -i '.image.web_repository_tag = "$TAG"' 'deployment/charts/app/values.yaml'
+    env:
+      TAG: 'dev'

@@ -1,0 +1,33 @@
+name: Clean Up Pull Request
+
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  RUNNER_ALLOW_RUNASROOT: "1"
+
+concurrency:
+  group: ${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  cleanup:
+    name: "Cleanup"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+      - name: "Cleanup"
+        uses: "azarc-io/verathread-actions/cleanup@initial"
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue: ${{ steps.setup.outputs.issue }}
+          artifact-name: ${{ steps.setup.outputs.repo-name }}

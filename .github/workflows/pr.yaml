@@ -25,7 +25,8 @@ jobs:
         uses: "azarc-io/verathread-actions/setup@initial"
         id: setup
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
           go: true
         env:
           GOPRIVATE: "github.com/azarc-io"
@@ -44,7 +45,8 @@ jobs:
         uses: "azarc-io/verathread-actions/setup@initial"
         id: setup
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
           gotestsum: true
           go: true
         env:
@@ -64,7 +66,8 @@ jobs:
         uses: "azarc-io/verathread-actions/setup@initial"
         id: setup
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -86,7 +89,8 @@ jobs:
         uses: "azarc-io/verathread-actions/setup@initial"
         id: setup
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -121,7 +125,8 @@ jobs:
         uses: "azarc-io/verathread-actions/setup@initial"
         id: setup
         with:
-          token: ${{ secrets.PAT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
 
   qa:
     name: "Promote To QA"
@@ -153,18 +158,38 @@ jobs:
         env:
           MONGO_DSN: ${{ secrets.MONGODB_STAGING_DSN }}
 
-#  release:
-#    name: "Release"
-#    runs-on: ubuntu-latest
-#    environment: production
-#    outputs:
-#      version: ${{ steps.tag.outputs.tag }}
-#    needs:
-#      - qa
-#    steps:
-#      - name: "Checkout"
-#        uses: actions/checkout@v4
-#        with:
-#          fetch-depth: 0
-#          token: ${{ secrets.PAT_TOKEN }}
-#          #ref: ${{ github.event.pull_request.head.sha }}
+  release:
+    name: "Release"
+    runs-on: ubuntu-latest
+    environment: prd
+    outputs:
+      version: ${{ steps.tag.outputs.tag }}
+    needs:
+      - qa
+    steps:
+      - name: "Setup"
+        uses: "azarc-io/verathread-actions/setup@initial"
+        id: setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
+          checkout-ref: ${{ github.event.pull_request.head.sha }}
+          jira-base-url: ${{ secrets.JIRA_BASE_URL }}
+          jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
+          jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
+          kube-config: ${{ secrets.KUBECONFIG_DEV }}
+          ghcr: true
+          helm: true
+          kubectl: true
+          buildx: true
+          yq: true
+      - name: "Release"
+        uses: "azarc-io/verathread-actions/release@initial"
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          pat-token: ${{ secrets.PAT_TOKEN }}
+          ghcr-token: ${{ secrets.GHCR_DOCKER_TOKEN }}
+          issue: ${{ steps.setup.outputs.issue }}
+          short-sha: ${{ steps.setup.outputs.short-sha }}
+          namespace: "stg-next-1"
+          artifact-name: ${{ steps.setup.outputs.repo-name }}
