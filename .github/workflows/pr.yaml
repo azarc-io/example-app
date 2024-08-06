@@ -26,7 +26,11 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           go: true
+        env:
+          GOPRIVATE: "github.com/azarc-io"
       - name: "Lint"
         uses: "azarc-io/verathread-actions/lint-be@initial"
         with:
@@ -44,10 +48,16 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           gotestsum: true
           go: true
+        env:
+          GOPRIVATE: "github.com/azarc-io"
       - name: "Unit Test"
         uses: "azarc-io/verathread-actions/unit-test-be@initial"
+        env:
+          GOPRIVATE: "github.com/azarc-io"
         with:
           repo-name: ${{ steps.setup.repo-name }}
 
@@ -61,6 +71,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -84,6 +96,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
@@ -120,6 +134,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
 
   qa:
     name: "Promote To QA"
@@ -134,6 +150,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
+          dockerhub-user: ${{ secrets.DOCKERHUB_USER }}
+          dockerhub-pass: ${{ secrets.DOCKERHUB_PASS }}
           jira-base-url: ${{ secrets.JIRA_BASE_URL }}
           jira-user-email: ${{ secrets.JIRA_USER_EMAIL }}
           jira-api-token: ${{ secrets.JIRA_API_TOKEN }}
