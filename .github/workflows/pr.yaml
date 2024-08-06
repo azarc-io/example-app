@@ -27,12 +27,12 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           pat-token: ${{ secrets.PAT_TOKEN }}
           go: true
-        env:
-          GOPRIVATE: "github.com/azarc-io"
       - name: "Lint"
         uses: "azarc-io/verathread-actions/lint-be@initial"
         with:
           lint-version: "v1.59.1"
+        env:
+          GOPRIVATE: "github.com/azarc-io"
 
   unit-tests-be:
     name: "Unit Test BE"
@@ -48,14 +48,12 @@ jobs:
           pat-token: ${{ secrets.PAT_TOKEN }}
           gotestsum: true
           go: true
-        env:
-          GOPRIVATE: "github.com/azarc-io"
       - name: "Unit Test"
         uses: "azarc-io/verathread-actions/unit-test-be@initial"
-        env:
-          GOPRIVATE: "github.com/azarc-io"
         with:
           repo-name: ${{ steps.setup.repo-name }}
+        env:
+          GOPRIVATE: "github.com/azarc-io"
 
   build-be:
     name: "Build BE"
@@ -79,6 +77,8 @@ jobs:
           artifact-name: ${{ steps.setup.outputs.repo-name }}
           short-sha: ${{ steps.setup.outputs.short-sha }}
           issue: ${{ steps.setup.outputs.issue }}
+        env:
+          GOPRIVATE: "github.com/azarc-io"
 
   build-fe:
     name: "Build FE"
@@ -102,6 +102,8 @@ jobs:
           artifact-name: ${{ steps.setup.outputs.repo-name }}
           short-sha: ${{ steps.setup.outputs.short-sha }}
           issue: ${{ steps.setup.outputs.issue }}
+        env:
+          GOPRIVATE: "github.com/azarc-io"
 
   e2e:
     name: "E2E - K8S ${{ matrix.k8s-version }}"
@@ -157,6 +159,7 @@ jobs:
           issue: ${{ steps.setup.outputs.issue }}
         env:
           MONGO_DSN: ${{ secrets.MONGODB_STAGING_DSN }}
+          GOPRIVATE: "github.com/azarc-io"
 
   release:
     name: "Release"
