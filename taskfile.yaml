@@ -376,16 +376,10 @@ tasks:
           --namespace=$NAMESPACE \
           --values=deployment/charts/app/values.yaml \
           --set configuration.database.dsn=$MONGO_DSN \
-          --set configuration.database.name=vth-example-app-stg-1 \
-          --set image.repository=ghcr.io/azarc-io/example-app/example-app-be \
-          --set image.web_repository=ghcr.io/azarc-io/example-app/example-app-fe \
-          --set image.tag=$APP_IMAGE_TAG \
-          --set image.web_tag=$WEB_IMAGE_TAG
+          --set configuration.database.name=vth-example-app-stg-1
     env:
       MONGO_DSN: ""
       NAMESPACE: "dev-test"
-      APP_IMAGE_TAG: ""
-      WEB_IMAGE_TAG: ""
 
   ci:test:
     cmds:
